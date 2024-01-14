@@ -15,4 +15,8 @@ export class ProductService {
     async findOne(id: string): Promise<Product> {
         return this.productModel.findOne({id: id}).exec();
     }
+    async createOrUpdate(product: Product) {
+        const createProduct = new this.productModel(product);
+        return createProduct.save();
+    }
 }
