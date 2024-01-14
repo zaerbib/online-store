@@ -1,7 +1,9 @@
-import { Controller, Get, Param, Render } from "@nestjs/common";
+import { Controller, Get, Param, Render, Res } from "@nestjs/common";
+import { ProductService } from "./product.service";
 
 @Controller('/products')
 export class ProductsController {
+    constructor(private readonly productsService: ProductService) {}
 
     static products = [
         {
@@ -37,11 +39,11 @@ export class ProductsController {
 
     @Get('/')
     @Render('products/index')
-    index() {
+    async index() {
         const viewData = [];
         viewData['title'] = 'Products - Online Store';
         viewData['subtitle'] = 'List of products';
-        viewData['products'] = ProductsController.products;
+        viewData['products'] = await this.productsService.findAll();
 
         return {
             viewData: viewData
@@ -49,17 +51,18 @@ export class ProductsController {
     }
 
     @Get('/:id')
-    @Render('products/show')
-    show(@Param() params) {
-        const product = ProductsController.products[params.id - 1];
+    async show(@Param() params, @Res() response) {
+        const product = await this.productsService.findOne(params.id);
+        if(product === undefined) {
+            return response.redirect('/products');
+        }
+
         const viewData = [];
         viewData['title'] = product.name + '- Online Store';
         viewData['subtitle'] = product.name + '- Product Information';
         viewData['product'] = product;
         
-        return {
-            viewData: viewData
-        }
+        return response.render('products/show', { viewData: viewData });
     }
 
 }
