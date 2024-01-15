@@ -3,19 +3,16 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AdminModule } from './admin/admin.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ProductsController } from './models/products.controller';
-import { ProductService } from './models/product.service';
-import { Product, ProductSchema } from './models/product.schema';
+import { ProductModule } from './models/product.module';
 
 @Global()
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost:27017/online'),
-    MongooseModule.forFeature([{ name: Product.name, schema: ProductSchema}]),
+    MongooseModule.forRoot('mongodb://localhost:27017/online'), 
+    ProductModule,
     AdminModule
   ],
-  controllers: [AppController, ProductsController],
-  providers: [AppService, ProductService],
-  exports: [ProductService]
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule { }

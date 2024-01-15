@@ -19,4 +19,12 @@ export class ProductService {
         const createProduct = new this.productModel(product);
         return createProduct.save();
     }
+
+    async findHighId(): Promise<number> {
+        return this.productModel.countDocuments({}).exec();
+    }
+
+    async remove(id: string): Promise<void> {
+        await this.productModel.deleteOne({id: id}).exec();
+    }
 }
