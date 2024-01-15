@@ -62,10 +62,18 @@
             <tbody>
                 {{#each viewData.products}}
                 <tr>
-                    <td>id</td>
-                    <td>name</td>
-                    <td>Edit</td>
-                    <td>Delete</td>
+                    <td>{{id}}</td>
+                    <td>{{name}}</td>
+                    <td><a class="btn btn-primary" href="/admin/products/{{id}}">
+                            <i class="bi-pencil"></i>
+                        </a></td>
+                    <td>
+                        <form action="/admin/products/{{id}}" method="POST">
+                            <button class="btn btn-danger">
+                                <i class="bi-trash"></i>
+                            </button>
+                        </form>
+                    </td>
                 </tr>
                 {{/each}}
             </tbody>
